@@ -1,0 +1,19 @@
+2021-02-24 03:40:12 INFO  log:192 - Logging initialized @353ms to org.eclipse.jetty.util.log.Slf4jLog
+2021-02-24 03:40:12 WARN  ContextHandler:1492 - o.e.j.s.ServletContextHandler@42607a4f{/,null,UNAVAILABLE} contextPath ends with /*
+2021-02-24 03:40:12 WARN  ContextHandler:1503 - Empty contextPath
+2021-02-24 03:40:12 WARN  ContextHandler:1497 - o.e.j.s.h.ContextHandler@51b279c9{/,null,UNAVAILABLE} contextPath ends with /
+2021-02-24 03:40:12 INFO  Server:372 - jetty-9.4.z-SNAPSHOT
+2021-02-24 03:40:12 INFO  ContextHandler:788 - Started o.e.j.s.h.ContextHandler@51b279c9{/docs,null,AVAILABLE}
+2021-02-24 03:40:12 INFO  cluster:71 - Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=20}
+2021-02-24 03:40:12 INFO  connection:71 - Opened connection [connectionId{localValue:1, serverValue:5}] to localhost:27017
+2021-02-24 03:40:12 INFO  cluster:71 - Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[3, 6, 3]}, minWireVersion=0, maxWireVersion=6, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=2148198}
+2021-02-24 03:40:13 ERROR info:374 - Does not exist: /home/metabig/Desktop/Work/ODIN/MetadataStorage_ODIN_TDB/
+2021-02-24 03:40:13 INFO  ROOT:2221 - org.glassfish.jersey.servlet.ServletContainer-2758fe70: init
+2021-02-24 03:40:19 INFO  ContextHandler:788 - Started o.e.j.s.ServletContextHandler@42607a4f{/,null,AVAILABLE}
+2021-02-24 03:40:19 INFO  AbstractConnector:280 - Started ServerConnector@1daf3b44{HTTP/1.1,[http/1.1]}{0.0.0.0:8082}
+2021-02-24 03:40:19 INFO  Server:444 - Started @7579ms
+2021-02-24 03:40:32 ERROR info:374 - Does not exist: /home/metabig/Desktop/Work/ODIN/MetadataStorage_ODIN_TDB/
+2021-02-24 03:40:32 INFO  connection:71 - Opened connection [connectionId{localValue:3, serverValue:7}] to localhost:27017
+2021-02-24 03:40:32 INFO  connection:71 - Opened connection [connectionId{localValue:2, serverValue:6}] to localhost:27017
+2021-02-24 03:40:56 INFO  SchemaExtractionResource:94 - [POST /csv] body = {"status":true,"filename":"1614134452428-w2.csv","type":"csv","givenName":"csv","filePath":""}
+2021-02-24 03:41:25 INFO  SchemaExtractionResource:94 - [POST /csv] body = {"status":true,"filename":"1614134483772-w2.csv","type":"csv","givenName":"xcv","filePath":""}

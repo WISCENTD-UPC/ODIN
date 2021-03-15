@@ -9,7 +9,7 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var session = require('express-session');
 var app = express();
-var io = require('socket.io').listen(app.listen(port));
+app.listen(port);
 var flash = require('express-flash');
 var multer = require('multer');
 var upload = multer({ dest: config.FILES_PATH });

@@ -40,23 +40,36 @@ block content
                     label.col-lg-4.col-form-label Name
                     .col-lg-12
                         input#givenName.form-control(type='text', name='givenName', required='required')
-
-                .form-group#typeForm
-                    label.col-lg-4.col-form-label Type
+                
+                .form-group#LocalRemoteForm
                     .col-lg-12
                         ul#typeTabs.nav.nav-tabs(role="tablist").border-white
                             li.nav-item
-                                a.text-primary#json-tab.nav-link.active(data-toggle="tab" href="#json" role="tab" aria-controls="messages" aria-selected="false" data-hint="Please provide a JSON file starting with JSON object {} not an array []").font-weight-bold JSON
+                                a.text-primary#local-tab.nav-link(data-toggle="tab" href="#local" role="tab" aria-controls="messages" aria-selected="false").font-weight-bold LOCAL
                             li.nav-item
-                                a.text-primary#xml-tab.nav-link(data-toggle="tab" href="#xml" role="tab" aria-controls="messages" aria-selected="false").font-weight-bold XML
-                            li.nav-item
-                                a.text-primary#csv-tab.nav-link(data-toggle="tab" href="#csv" role="tab" aria-controls="messages" aria-selected="false" ).font-weight-bold CSV
-                            li.nav-item
-                                a.text-primary#sqldatabase-tab.nav-link(data-toggle="tab" href="#sqldatabase" role="tab" aria-controls="settings" aria-selected="false" data-hint='Please provide a String with UserName, Password, Database Name and Server e.g. localhost/IP in a following order separated by commas \"UserName, Password, databaseName, databaseServer \"').font-weight-bold MySQL
-
+                                a.text-primary#remote-tab.nav-link(data-toggle="tab" href="#remote" role="tab" aria-controls="messages" aria-selected="false" ).font-weight-bold REMOTE
+                .tab-content
+                    #remote.tab-pane
+                        .form-group#typeForm
+                            .col-lg-12
+                                ul#typeTabs.nav.nav-tabs(role="tablist").border-white
+                                    li.nav-item
+                                        a.text-primary#sqldatabase-tab.nav-link(data-toggle="tab" href="#sqldatabase" role="tab" aria-controls="settings" aria-selected="false" data-hint='Please provide a String with UserName, Password, Database Name and Server e.g. localhost/IP in a following order separated by commas \"UserName, Password, databaseName, databaseServer \"').font-weight-bold MySQL
+                                    li.nav-item
+                                        a.text-primary#datalake-tab.nav-link(data-toggle="tab" href="#datalake" role="tab" aria-controls="messages" aria-selected="false" ).font-weight-bold DATA LAKE
+                    #local.tab-pane
+                            .col-lg-12
+                                ul#typeTabs.nav.nav-tabs(role="tablist").border-white
+                                    li.nav-item
+                                        a.text-primary#json-tab.nav-link(data-toggle="tab" href="#json" role="tab" aria-controls="messages" aria-selected="false" data-hint="Please provide a JSON file starting with JSON object {} not an array []").font-weight-bold JSON
+                                    li.nav-item
+                                        a.text-primary#xml-tab.nav-link(data-toggle="tab" href="#xml" role="tab" aria-controls="messages" aria-selected="false").font-weight-bold XML
+                                    li.nav-item
+                                        a.text-primary#csv-tab.nav-link(data-toggle="tab" href="#csv" role="tab" aria-controls="messages" aria-selected="false" ).font-weight-bold CSV
+                                
                 .tab-content
 
-                    #json.tab-pane.active
+                    #json.tab-pane
                         .form-group#json_pathForm
                             label.col-lg-4.col-form-label JSON File path
                             .col-lg-12
@@ -81,6 +94,12 @@ block content
                             .col-lg-12
                                 input#sql_path.form-control(type='text', name='sql_file_path' placeholder='UserName,Password,databaseName,databaseServer')
 
+                    #datalake.tab-pane
+                        .form-group#datalake_pathForm
+                            label.col-lg-4.col-form-label Open Data Lake Modal
+                            .col-lg-12
+                                button#ButtonDataLakeModal(type="button") Open row list
+                                h5#SelectedDataLakeRow
                 .form-group
                     .col-lg-12.col-lg-offset-2
                         button#submitDataSource.btn.btn-primary.btn-md.btn-block(type="submit") Submit
@@ -89,8 +108,6 @@ block content
                         .progress
                             .progress-bar.progress-bar-striped.active(role='progressbar', aria-valuenow='0', aria-valuemin='0', aria-valuemax='100', style='width: 0%')
                                 span.sr-only
-
-
 
     .col-8.float-left
         .card.bg-light.mb-3
@@ -172,7 +189,32 @@ block content
                         button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
                         button#ModalProceedButton.btn.btn-primary(type='button') Proceed
 
-
+        // Modal Data Lake
+        #DataLakeModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+            .modal-dialog.modal-lg(role='document', style="max-width: 85%")
+                .modal-content
+                    .modal-header
+                        h5#exampleModalLabel.modal-title Select the row you want to upload
+                        button.close(type='button', data-dismiss='modal', aria-label='Close')
+                            span(aria-hidden='true') ×
+                    .modal-body
+                        table.table.table-hover.table-responsive#dataSources
+                            thead
+                                tr
+                                    th.width20 Data Source Name
+                                        div.input-group
+                                            input#SearchDL(type="text", placeholder="Search...")
+                                            button#SearchDL-btn(type="button") Search
+                                    th.width20 Data Type
+                                    th.width20 Confidentiality
+                                    th.width20 Disease
+                                    th.width20 Filename
+                                    th.width20 Classification
+                            tbody
+                        nav
+                            ul#DLPagination.pagination
+                    .modal-footer
+                        button.btn.btn-primary(type='button', data-dismiss='modal') Done
 
         #div.text-center
             button#integrateDataSourcesButton.btn.btn-primary.btn-md.align-center.btn-block.disabled(type="button") Integrate Selected Sources
