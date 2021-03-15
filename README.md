@@ -68,6 +68,15 @@ You should get a similar output to the following one. This is the Kafka topic wh
 }
 ```
 
+### Change HOSTNAME and PORT of the fetched API (api-data-entry)
+The api variables are stored at the first lines of [bdi_index_script.js](MetadataFrontend/public/js/bdi_index_script.js)
+```js
+const api_config = {
+    "HOSTNAME": "localhost",
+    "PORT": 12345
+}
+```
+
    [mdm_frontend]: <https://github.com/supersede-project/big_data/tree/master/data_management/MetadataManagementSystem/MetadataFrontend>
    [mdm_storage]: <https://github.com/supersede-project/big_data/tree/master/data_management/MetadataManagementSystem/MetadataStorage>
    [config.properties.frontend]: <https://github.com/supersede-project/big_data/blob/master/data_management/MetadataManagementSystem/MetadataFrontend/config.js>
