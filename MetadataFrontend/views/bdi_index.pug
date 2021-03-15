@@ -204,12 +204,49 @@ block content
                                     th.width20 Data Source Name
                                         div.input-group
                                             input#SearchDL(type="text", placeholder="Search...")
-                                            button#SearchDL-btn(type="button") Search
                                     th.width20 Data Type
+                                        div.input-group
+                                            select#SelectDT
+                                                option(value="") 
+                                                option(value="Individual Data") Individual Data
+                                                option(value="Agregated Data") Agregated Data
+                                                option(value="Estimated Data") Estimated Data
+                                                option(value="Survey Data") Survey Data
                                     th.width20 Confidentiality
+                                        div.input-group
+                                            select#SelectConfidentiality
+                                                option(value="") 
+                                                option(value="Public") Public
+                                                option(value="Shareable") Shareable
+                                                option(value="Confidential") Confidential
+                                                option(value="Incomplete status") Incomplete status
                                     th.width20 Disease
+                                        div.input-group
+                                                select#SelectDisease
+                                                    option(value="")                                                 
+                                                    option(value="General") General
+                                                    option(value="Chagas disease") Chagas disease
+                                                    option(value="Rabies") Rabies
+                                                    option(value="Leishmaniosis") Leishmaniosis
+                                                    option(value="Buruli ulcer") Buruli ulcer
+                                                    option(value="Cutaneous leishmaniasis") Cutaneous leishmaniasis
+                                                    option(value="Yaws") Yaws
+                                                    option(value="HAT (Sleeping sickness)") HAT (Sleeping sickness)
+                                                    option(value="Leprosy") Leprosy
+                                                    option(value="Visceral Leishmaniasis") Visceral Leishmaniasis
+                                                    option(value="Mycetoma") Mycetoma
+                                                    option(value="Malaria") Malaria
+                                                    option(value="Other") Other 
                                     th.width20 Filename
+                                        div.input-group
+                                            input#SearchFilename(type="text", placeholder="Search...")
                                     th.width20 Classification
+                                        div.input-group
+                                            select#SelectClassification
+                                                option(value="") 
+                                                option(value="Unconfirmed") Unconfirmed
+                                                option(value="Unofficial") Unofficial
+                                                option(value="Official") Official
                             tbody
                         nav
                             ul#DLPagination.pagination
@@ -220,4 +257,4 @@ block content
             button#integrateDataSourcesButton.btn.btn-primary.btn-md.align-center.btn-block.disabled(type="button") Integrate Selected Sources
 
     script(src='/js/bdi_index_script.js')
-    script(src='/js/intro.js')
+    script(src='/js/intro.js')    

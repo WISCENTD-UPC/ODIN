@@ -1,3 +1,8 @@
+const api_config = {
+    "HOSTNAME": "localhost",
+    "PORT": 12345
+}
+
 /**
  * Created by Kashif-Rabbani
  */
@@ -105,11 +110,7 @@ function handler(dataSource) {
             return xhr;
         }
     }).done(function (data) {
-        console.log({ data })
-        console.log("Return: " + JSON.stringify(data));
-        console.log(data[0].filename.split('.').pop());
         var fileExtension = data[0].filename.split('.').pop();
-        console.log({ fileExtension })
         console.log(data[0].status)
         if (data[0].status === true && data[0].type === fileExtension) {
             parseSource(data);
@@ -198,69 +199,66 @@ function _base64ToArrayBuffer(base64) {
     return bytes.buffer;
 }
 
-//Endpoint per arxius validats[API]
-//class active quan es clica a un li
-//Submit carrega el li active
+function filterChanged(data) {
+    var filtered = data
+    const searchDLVal = $('#SearchDL').val()
+    const searchFilenameVal = $('#SearchFilename').val()
+    const selectDTVal = $('#SelectDT').val()
+    const selectConfidentialityVal = $('#SelectConfidentiality').val()
+    const selectDiseaseVal = $('#SelectDisease').val()
+    const selectClassificationVal = $('#SelectClassification').val()
 
-function parseKey(key) {
-    let ret = btoa(key)
-    //while (ret[ret.length-1] === "=") ret.slice(0, -1)
-    return ret
+    if (searchDLVal !== "") 
+        filtered = filtered.filter((row) => row["Data Source Name"].search(searchDLVal) !== -1)
+    if (searchFilenameVal !== "")
+        filtered = filtered.filter((row) => row.filename.search(searchFilenameVal) !== -1)
+    if (selectDTVal !== "")
+        filtered = filtered.filter((row) => row["Data Type"].search(selectDTVal) !== -1)
+    if (selectConfidentialityVal !== "")
+        filtered = filtered.filter((row) => row["Confidentiality"].search(selectConfidentialityVal) !== -1)
+    if (selectDiseaseVal !== "")
+        filtered = filtered.filter((row) => row["Select disease"].search(selectDiseaseVal) !== -1)
+    if (selectClassificationVal !== "")
+        filtered = filtered.filter((row) => row["Classification"].search(selectClassificationVal) !== -1)
+
+    return filtered;
+}
+
+function printRow(row) {
+    $('#DataLakeModal').find('tbody')
+        .append($('<tr>').attr('id', btoa(row.key).split("=")[0])
+            .append($('<td>').text(row["Data Source Name"]))
+            .append($('<td>').text(row["Data Type"]))
+            .append($('<td>').text(row["Confidentiality"]))
+            .append($('<td>').text(row["Select disease"]))
+            .append($('<td>').text(row.filename))
+            .append($('<td>').text(row.Classification))
+            .on("click", function () {
+                $(this).parent().children().removeClass("table-active")
+                $('#' + $(this).attr("id")).addClass("table-active")
+                $('#SelectedDataLakeRow').text(row["Data Source Name"] + " > " + row.filename)
+            }))
 }
 
 function printElementsFromHbase() {
-
-
-
     $('#ButtonDataLakeModal').on("click", function () {
         $('#DataLakeModal').modal('toggle')
         if (!$('#DataLakeModal').find('tbody').find("td").length) {
             $.ajax({
-                url: "http://localhost:12345/api/hbase/validatedRows",
+                url: "http://" + api_config.HOSTNAME + ":" + api_config.PORT + "/api/hbase/validatedRows",
                 type: 'GET',
                 dataType: 'json', // added data type
             }).done(function (data) {
-                console.log($('#DataLakeModal'))
-                console.log(data)
-                let key = 0;
-                let nPages = Math.trunc(data.length/10);
-                if(data.length%10 !== 0) ++nPages;
-                console.log(nPages)
+                let nPages = Math.trunc(data.length / 10);
+                if (data.length % 10 !== 0) ++nPages;
 
                 if (nPages === 1) {
                     data.forEach(row => {
-                        $('#DataLakeModal').find('tbody')
-                            .append($('<tr>').attr('id', btoa(row.key).split("=")[0])
-                                .append($('<td>').text(row["Data Source Name"]))
-                                .append($('<td>').text(row["Data Type"]))
-                                .append($('<td>').text(row["Confidentiality"]))
-                                .append($('<td>').text(row["Select disease"]))
-                                .append($('<td>').text(row.filename))
-                                .append($('<td>').text(row.Classification))
-                                .on("click", function () {
-                                    $(this).parent().children().removeClass("table-active")
-                                    $('#' + $(this).attr("id")).addClass("table-active")
-                                    $('#SelectedDataLakeRow').text(row["Data Source Name"] + " > " + row.filename)
-                                }))
+                        printRow(row)
                     })
                 } else {
                     for (let i = 0; i < 10; ++i) {
-                        row = data[i]
-                        $('#DataLakeModal').find('tbody')
-                        .append($('<tr>').attr('id', btoa(row.key).split("=")[0])
-                            .append($('<td>').text(row["Data Source Name"]))
-                            .append($('<td>').text(row["Data Type"]))
-                            .append($('<td>').text(row["Confidentiality"]))
-                            .append($('<td>').text(row["Select disease"]))
-                            .append($('<td>').text(row.filename))
-                            .append($('<td>').text(row.Classification))
-                            .on("click", function () {
-                                $(this).parent().children().removeClass("table-active")
-                                //$('#' + btoa($(this).attr("id"))).addClass("table-active")
-                                $('#' + $(this).attr("id")).addClass("table-active")
-                    
-                                $('#SelectedDataLakeRow').text(row["Data Source Name"] + " > " + row.filename)
-                            }))
+                        printRow(data[i])
                     }
                     //Add Pagination
                     $("#DLPagination").append(
@@ -271,75 +269,29 @@ function printElementsFromHbase() {
                     for (let i = 1; i < nPages; ++i)
                         $("#DLPagination").append(
                             $('<li>').addClass("page-item").append(
-                                $('<a>').addClass("page-link").text(i+1)
+                                $('<a>').addClass("page-link").text(i + 1)
                             )
                         )
-                    $("#DLPagination>li").on("click", function() {
+                    $("#DLPagination>li").on("click", function () {
                         $(this).parent().children().removeClass("active")
                         if (!$(this).hasClass("active")) {
                             $(this).addClass("active")
                             let page = $(this)[0].innerText
-                            console.log(page)
                             $('#DataLakeModal').find('tbody').empty()
-                            for (let i = page*10 - 10; i < page*10 && i < data.length; ++i) {
-                                row = data[i]
-                                $('#DataLakeModal').find('tbody')
-                                .append($('<tr>').attr('id', btoa(row.key).split("=")[0])
-                                    .append($('<td>').text(row["Data Source Name"]))
-                                    .append($('<td>').text(row["Data Type"]))
-                                    .append($('<td>').text(row["Confidentiality"]))
-                                    .append($('<td>').text(row["Select disease"]))
-                                    .append($('<td>').text(row.filename))
-                                    .append($('<td>').text(row.Classification))
-                                    .on("click", function () {
-                                        $(this).parent().children().removeClass("table-active")
-                                        $('#' + $(this).attr("id")).addClass("table-active")
-                                        $('#SelectedDataLakeRow').text(row["Data Source Name"] + " > " + row.filename)
-                                    }))
+                            for (let i = page * 10 - 10; i < page * 10 && i < data.length; ++i) {
+                                printRow(data[i])
                             }
                         }
                     })
                 }
 
-                $('#SearchDL-btn').on("click", function() {
-                    const searchval = $('#SearchDL').val()
-                    if (searchval !== "") {
-                        $('#DataLakeModal').find('tbody').empty()
-                        const filtered = data.filter((row) => row["Data Source Name"].search(searchval) !== -1)
-                        for (let i = 0; i < 10 && i < filtered.length; ++i) {
-                            row = filtered[i]
-                            $('#DataLakeModal').find('tbody')
-                            .append($('<tr>').attr('id', btoa(row.key).split("=")[0])
-                                .append($('<td>').text(row["Data Source Name"]))
-                                .append($('<td>').text(row["Data Type"]))
-                                .append($('<td>').text(row["Confidentiality"]))
-                                .append($('<td>').text(row["Select disease"]))
-                                .append($('<td>').text(row.filename))
-                                .append($('<td>').text(row.Classification))
-                                .on("click", function () {
-                                    $(this).parent().children().removeClass("table-active")
-                                    $('#' + $(this).attr("id")).addClass("table-active")
-                                    $('#SelectedDataLakeRow').text(row["Data Source Name"] + " > " + row.filename)
-                                }))
-                        }
-                    } else {
-                        $('#DataLakeModal').find('tbody').empty()
-                        for (let i = 0; i < 10 && i < data.length; ++i) {
-                            row = data[i]
-                            $('#DataLakeModal').find('tbody')
-                            .append($('<tr>').attr('id', btoa(row.key).split("=")[0])
-                                .append($('<td>').text(row["Data Source Name"]))
-                                .append($('<td>').text(row["Data Type"]))
-                                .append($('<td>').text(row["Confidentiality"]))
-                                .append($('<td>').text(row["Select disease"]))
-                                .append($('<td>').text(row.filename))
-                                .append($('<td>').text(row.Classification))
-                                .on("click", function () {
-                                    $(this).parent().children().removeClass("table-active")
-                                    $('#' + $(this).attr("id")).addClass("table-active")
-                                    $('#SelectedDataLakeRow').text(row["Data Source Name"] + " > " + row.filename)
-                                }))
-                        }
+                $('#SearchDL, #SearchFilename, #SelectDT, ' + 
+                  '#SelectClassification, #SelectDisease, #SelectConfidentiality')
+                    .on("change keyup paste", function () {
+                    const filtered = filterChanged(data)
+                    $('#DataLakeModal').find('tbody').empty()
+                    for (let i = 0; i < 10 && i < filtered.length; ++i) {
+                        printRow(filtered[i])
                     }
                 })
             })
@@ -472,7 +424,7 @@ $(function () {
 
             case "datalake-tab":
                 const key = $('#SelectedDataLakeRow')[0].innerHTML
-                const URL = "http://localhost:12345/api/hbase/getData/" + encodeURI(key)
+                const URL = "http://" + api_config.HOSTNAME + ":" + api_config.PORT + "/api/hbase/getData/" + encodeURI(key)
                 const filename = key.split('$')[2]
                 console.log(filename)
                 $.ajax({
